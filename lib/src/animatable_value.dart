@@ -1,7 +1,7 @@
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
-import 'animation.dart' as sa;
+import 'animation_spec.dart';
 import 'animator_state.dart';
 import 'transaction.dart';
 import 'vector_arithmetic.dart';
@@ -20,7 +20,7 @@ class AnimatableValue<T extends VectorArithmetic<T>> extends StatefulWidget {
   final T value;
 
   /// Animation to use if no transaction is active. Usually `null`.
-  final sa.Animation? defaultAnimation;
+  final AnimationSpec? defaultAnimation;
 
   final Widget Function(BuildContext context, T animatedValue) builder;
 

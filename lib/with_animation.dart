@@ -5,7 +5,7 @@ library;
 
 export 'src/animatable_pair.dart';
 export 'src/animatable_value.dart';
-export 'src/animation.dart';
+export 'src/animation_spec.dart';
 export 'src/animation_context.dart';
 export 'src/animator_state.dart';
 export 'src/bezier_animation.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/scheduler.dart';
 
-import 'animation.dart';
+import 'animation_spec.dart';
 
 class Transaction {
-  final Animation? animation;
+  final AnimationSpec? animation;
   final bool disablesAnimations;
 
   const Transaction({this.animation, this.disablesAnimations = false});
@@ -20,7 +20,7 @@ class _TransactionStack {
 /// Run [body] with [animation] as the active animation for any state changes
 /// it triggers. Use synchronously inside `setState` callbacks for the same
 /// idiom as SwiftUI's `withAnimation`.
-T withAnimation<T>(Animation animation, T Function() body) =>
+T withAnimation<T>(AnimationSpec animation, T Function() body) =>
     _withTransaction(Transaction(animation: animation), body);
 
 T withTransaction<T>(Transaction transaction, T Function() body) =>
