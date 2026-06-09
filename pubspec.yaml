@@ -1,6 +1,6 @@
 name: with_animation
 description: SwiftUI-style declarative animation primitives for Flutter.
-version: 0.1.0
+version: 0.1.1
 repository: https://github.com/tilucasoli/with_animation
 
 environment:
