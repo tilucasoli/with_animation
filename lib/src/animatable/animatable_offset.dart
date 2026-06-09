@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'vector_arithmetic.dart';
 
-/// Two-component [VectorArithmetic] suitable for animating `Offset`-like values.
-class AnimatableOffset extends VectorArithmetic<AnimatableOffset> {
+/// Two-component [CustomVectorArithmetic] suitable for animating `Offset`-like values.
+class AnimatableOffset extends CustomVectorArithmetic<AnimatableOffset> {
   final Offset value;
   AnimatableOffset(this.value);
 

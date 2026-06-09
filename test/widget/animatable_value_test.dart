@@ -8,15 +8,15 @@ import 'package:with_animation/with_animation.dart'
         AnimatableValue,
         AnimationSpec,
         BezierAnimation,
+        CustomVectorArithmetic,
         SpringAnimation,
         Transaction,
-        VectorArithmetic,
         withAnimation,
         withTransaction;
 
 /// Test harness: rebuilds an [AnimatableValue] whose current `value` and
 /// `defaultAnimation` come from a host [_Driver].
-class _Host<T extends VectorArithmetic<T>> extends StatefulWidget {
+class _Host<T extends CustomVectorArithmetic<T>> extends StatefulWidget {
   final T initial;
   final AnimationSpec? defaultAnimation;
   final void Function(_DriverState<T> driver) onReady;
@@ -33,7 +33,7 @@ class _Host<T extends VectorArithmetic<T>> extends StatefulWidget {
   State<_Host<T>> createState() => _DriverState<T>();
 }
 
-class _DriverState<T extends VectorArithmetic<T>> extends State<_Host<T>> {
+class _DriverState<T extends CustomVectorArithmetic<T>> extends State<_Host<T>> {
   late T _value = widget.initial;
 
   void update(T newValue, {AnimationSpec? animation, bool disabled = false}) {

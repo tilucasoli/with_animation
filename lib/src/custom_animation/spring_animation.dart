@@ -38,7 +38,7 @@ class SpringAnimation extends CustomAnimation {
   }
 
   @override
-  T? animate<T extends VectorArithmetic<T>>(
+  T? animate<T extends CustomVectorArithmetic<T>>(
     T value,
     double time,
     AnimationContext<T> ctx,

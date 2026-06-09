@@ -11,7 +11,7 @@ class AnimationState {
 }
 
 /// Context passed to [CustomAnimation.animate] / `shouldMerge`.
-class AnimationContext<T extends VectorArithmetic<T>> {
+class AnimationContext<T extends CustomVectorArithmetic<T>> {
   AnimationState state;
   bool isLogicallyComplete;
 

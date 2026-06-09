@@ -30,7 +30,7 @@ class FluidSpringAnimation extends CustomAnimation {
   static const double _maxStiffness = 45000.0;
 
   @override
-  T? animate<T extends VectorArithmetic<T>>(
+  T? animate<T extends CustomVectorArithmetic<T>>(
     T value,
     double time,
     AnimationContext<T> ctx,
@@ -103,7 +103,7 @@ class FluidSpringAnimation extends CustomAnimation {
   }
 }
 
-class _FluidSpringState<T extends VectorArithmetic<T>> {
+class _FluidSpringState<T extends CustomVectorArithmetic<T>> {
   T offset;
   T velocity;
   T force;
