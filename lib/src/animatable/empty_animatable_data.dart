@@ -5,7 +5,7 @@ import 'vector_arithmetic.dart';
 /// Mirror of OpenSwiftUI's `EmptyAnimatableData`. Suitable for types that have
 /// no animatable properties — every operation is a no-op and the value is its
 /// own zero.
-class EmptyAnimatableData extends VectorArithmetic<EmptyAnimatableData> {
+class EmptyAnimatableData extends CustomVectorArithmetic<EmptyAnimatableData> {
   EmptyAnimatableData();
 
   @override

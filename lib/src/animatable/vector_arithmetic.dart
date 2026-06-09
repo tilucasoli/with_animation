@@ -1,9 +1,16 @@
+import 'dart:ui';
+
+import 'animatable_color.dart';
+import 'animatable_double.dart';
+import 'animatable_offset.dart';
+import 'empty_animatable_data.dart';
+
 /// Dart port of OpenSwiftUI's `VectorArithmetic` protocol.
 ///
 /// Any value that participates in animation must be able to add, subtract,
 /// and scale by a `double`. `magnitudeSquared` is used by spring physics to
 /// detect "settled" state.
-abstract class VectorArithmetic<T extends VectorArithmetic<T>> {
+abstract class CustomVectorArithmetic<T extends CustomVectorArithmetic<T>> {
   T operator +(T other);
   T operator -(T other);
   T scale(double factor);
@@ -11,13 +18,13 @@ abstract class VectorArithmetic<T extends VectorArithmetic<T>> {
   T get zero;
 }
 
-/// Composes two [VectorArithmetic] values into one. Mirror of SwiftUI's
+/// Composes two [CustomVectorArithmetic] values into one. Mirror of SwiftUI's
 /// `AnimatablePair<First, Second>`.
 class AnimatablePair<
-  A extends VectorArithmetic<A>,
-  B extends VectorArithmetic<B>
+  A extends CustomVectorArithmetic<A>,
+  B extends CustomVectorArithmetic<B>
 >
-    extends VectorArithmetic<AnimatablePair<A, B>> {
+    extends CustomVectorArithmetic<AnimatablePair<A, B>> {
   final A first;
   final B second;
   AnimatablePair(this.first, this.second);
@@ -48,14 +55,15 @@ class AnimatablePair<
   String toString() => '($first, $second)';
 }
 
-/// A list of [VectorArithmetic] values that itself conforms to [VectorArithmetic].
+/// A list of [CustomVectorArithmetic] values that itself conforms to
+/// [CustomVectorArithmetic].
 ///
 /// Mirror of OpenSwiftUI's `AnimatableArray<Element>`. `+`/`-` operate
 /// element-wise up to `min(lhs.length, rhs.length)`; extra trailing elements
 /// from `lhs` are preserved unchanged (matching the Swift package-private
 /// behavior).
-class AnimatableArray<E extends VectorArithmetic<E>>
-    extends VectorArithmetic<AnimatableArray<E>> {
+class AnimatableArray<E extends CustomVectorArithmetic<E>>
+    extends CustomVectorArithmetic<AnimatableArray<E>> {
   final List<E> elements;
 
   AnimatableArray(List<E> elements) : elements = List<E>.from(elements);
@@ -110,4 +118,40 @@ class AnimatableArray<E extends VectorArithmetic<E>>
 
   @override
   String toString() => 'AnimatableArray($elements)';
+}
+
+/// Type-erased handle around a [CustomVectorArithmetic] value, with static
+/// factories for the pre-built conformers. Mirror of [AnimationSpec]'s
+/// relationship to `CustomAnimation`.
+class VectorArithmetic {
+  final CustomVectorArithmetic base;
+  const VectorArithmetic(this.base);
+
+  /// Wraps a `double` as an [AnimatableDouble].
+  static VectorArithmetic double_(double value) =>
+      VectorArithmetic(AnimatableDouble(value));
+
+  /// Wraps an [Offset] as an [AnimatableOffset].
+  static VectorArithmetic offset(Offset offset) =>
+      VectorArithmetic(AnimatableOffset(offset));
+
+  /// Wraps a [Color] as an [AnimatableColor].
+  static VectorArithmetic color(Color color) =>
+      VectorArithmetic(AnimatableColor(color));
+
+  /// An [EmptyAnimatableData] placeholder for types with no animatable data.
+  static VectorArithmetic empty() => VectorArithmetic(EmptyAnimatableData());
+
+  /// Composes two [CustomVectorArithmetic] values into a single
+  /// [AnimatablePair].
+  static VectorArithmetic pair<
+    A extends CustomVectorArithmetic<A>,
+    B extends CustomVectorArithmetic<B>
+  >(A first, B second) =>
+      VectorArithmetic(AnimatablePair<A, B>(first, second));
+
+  /// Wraps a list of [CustomVectorArithmetic] values as an [AnimatableArray].
+  static VectorArithmetic array<E extends CustomVectorArithmetic<E>>(
+    List<E> elements,
+  ) => VectorArithmetic(AnimatableArray<E>(elements));
 }

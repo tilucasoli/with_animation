@@ -1,10 +1,10 @@
 import 'vector_arithmetic.dart';
 
-/// Boxed `double` that conforms to [VectorArithmetic].
+/// Boxed `double` that conforms to [CustomVectorArithmetic].
 ///
 /// Mirrors OpenSwiftUI's `Float`/`Double`/`CGFloat` conformances, which all
 /// collapse to a single floating-point type in Dart.
-class AnimatableDouble extends VectorArithmetic<AnimatableDouble> {
+class AnimatableDouble extends CustomVectorArithmetic<AnimatableDouble> {
   final double value;
   AnimatableDouble(this.value);
 

@@ -23,7 +23,7 @@ class BezierAnimation extends CustomAnimation {
       BezierAnimation(curve: const Cubic(0.42, 0, 0.58, 1.0), duration: d);
 
   @override
-  T? animate<T extends VectorArithmetic<T>>(
+  T? animate<T extends CustomVectorArithmetic<T>>(
     T value,
     double time,
     AnimationContext<T> ctx,

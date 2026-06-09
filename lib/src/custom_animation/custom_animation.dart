@@ -5,7 +5,7 @@ import '../animatable/vector_arithmetic.dart';
 ///
 /// Return `null` from [animate] to signal the animation has completed.
 abstract class CustomAnimation {
-  T? animate<T extends VectorArithmetic<T>>(
+  T? animate<T extends CustomVectorArithmetic<T>>(
     T value,
     double time,
     AnimationContext<T> context,
@@ -13,7 +13,7 @@ abstract class CustomAnimation {
 
   /// Default: don't merge — run alongside the previous animation. Same
   /// default as SwiftUI's `CustomAnimation`.
-  bool shouldMerge<T extends VectorArithmetic<T>>(
+  bool shouldMerge<T extends CustomVectorArithmetic<T>>(
     CustomAnimation previous,
     T value,
     double time,
