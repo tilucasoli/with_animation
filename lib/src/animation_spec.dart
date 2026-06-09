@@ -1,6 +1,8 @@
+import 'animatable/vector_arithmetic.dart';
 import 'custom_animation/bezier_animation.dart';
 import 'custom_animation/custom_animation.dart';
 import 'custom_animation/fluid_spring_animation.dart';
+import 'custom_animation/keyframe_track.dart';
 import 'custom_animation/repeat_animation.dart';
 import 'custom_animation/speed_animation.dart';
 import 'custom_animation/spring_animation.dart';
@@ -85,6 +87,22 @@ class AnimationSpec {
     dampingFraction: dampingFraction,
     blendDuration: blendDuration,
   );
+
+  /// Drives the animation through a list of [Keyframe]s along one timeline.
+  /// Mirror of SwiftUI's `KeyframeTrack`.
+  static AnimationSpec keyframeTrack<T extends VectorArithmetic<T>>(
+    List<Keyframe<T>> keyframes,
+  ) => AnimationSpec(KeyframeTrack<T>(keyframes));
+
+  /// Runs two child animations in parallel on the two halves of an
+  /// [AnimatablePair]. Typically each child is a [KeyframeTrack] over its own
+  /// [VectorArithmetic] type. Mirror of SwiftUI's `Keyframes` builder with
+  /// multiple `KeyframeTrack`s.
+  static AnimationSpec parallelKeyframeTracks<
+    A extends VectorArithmetic<A>,
+    B extends VectorArithmetic<B>
+  >(CustomAnimation first, CustomAnimation second) =>
+      AnimationSpec(ParallelKeyframeTracks<A, B>(first, second));
 
   /// Repeats the animation [count] times, optionally reversing on every
   /// other cycle. Mirror of SwiftUI's `Animation.repeatCount`.
