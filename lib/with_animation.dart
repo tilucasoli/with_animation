@@ -14,6 +14,8 @@ export 'src/animator_state.dart';
 export 'src/custom_animation/bezier_animation.dart';
 export 'src/custom_animation/custom_animation.dart';
 export 'src/custom_animation/fluid_spring_animation.dart';
+export 'src/custom_animation/keyframe_track.dart'
+    show Keyframe, KeyframeTrack, ParallelKeyframeTracks;
 export 'src/custom_animation/repeat_animation.dart';
 export 'src/custom_animation/speed_animation.dart';
 export 'src/custom_animation/spring_animation.dart';
