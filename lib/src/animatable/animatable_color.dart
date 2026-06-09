@@ -25,7 +25,7 @@ import 'vector_arithmetic.dart';
 /// untouched magnitude would be vanishingly small; pre-scaling keeps it in the
 /// same order of magnitude as the rest of the animation pipeline. We mirror
 /// the trick by scaling inside [magnitudeSquared].
-class AnimatableColor extends VectorArithmetic<AnimatableColor> {
+class AnimatableColor extends CustomVectorArithmetic<AnimatableColor> {
   static const double _unitScale = 128.0;
 
   final Color value;

@@ -4,7 +4,7 @@ import 'animatable/vector_arithmetic.dart';
 
 /// Drives a single in-flight animation for one [AnimatableValue]. Mirror of
 /// SwiftUI's `AnimatorState` — kept as a pure value-producer (no ticker).
-class AnimatorState<T extends VectorArithmetic<T>> {
+class AnimatorState<T extends CustomVectorArithmetic<T>> {
   final AnimationSpec animation;
   final T interval; // newValue - previousValue
   final Duration beginTime;

@@ -16,7 +16,7 @@ import 'animatable/vector_arithmetic.dart';
 /// state does not own a Tween. It owns a `T interval` and a current
 /// [AnimatorState] that produces scaled deltas added on top of the previous
 /// value. The user's `widget.value` source of truth flows through unchanged.
-class AnimatableValue<T extends VectorArithmetic<T>> extends StatefulWidget {
+class AnimatableValue<T extends CustomVectorArithmetic<T>> extends StatefulWidget {
   final T value;
 
   /// Animation to use if no transaction is active. Usually `null`.
@@ -35,7 +35,7 @@ class AnimatableValue<T extends VectorArithmetic<T>> extends StatefulWidget {
   State<AnimatableValue<T>> createState() => _AnimatableValueState<T>();
 }
 
-class _AnimatableValueState<T extends VectorArithmetic<T>>
+class _AnimatableValueState<T extends CustomVectorArithmetic<T>>
     extends State<AnimatableValue<T>>
     with SingleTickerProviderStateMixin {
   late final Ticker _ticker;

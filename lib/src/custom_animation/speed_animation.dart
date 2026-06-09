@@ -14,7 +14,7 @@ class SpeedAnimation extends CustomAnimation {
   SpeedAnimation({required this.base, required this.speed});
 
   @override
-  T? animate<T extends VectorArithmetic<T>>(
+  T? animate<T extends CustomVectorArithmetic<T>>(
     T value,
     double time,
     AnimationContext<T> context,
