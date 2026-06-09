@@ -7,6 +7,7 @@ export 'src/animatable/animatable_color.dart';
 export 'src/animatable/animatable_double.dart';
 export 'src/animatable/animatable_offset.dart';
 export 'src/animatable/empty_animatable_data.dart';
+export 'src/animatable_channels.dart';
 export 'src/animatable_value.dart';
 export 'src/animation_spec.dart';
 export 'src/animation_context.dart';
