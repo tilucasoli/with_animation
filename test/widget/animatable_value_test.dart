@@ -36,11 +36,7 @@ class _Host<T extends VectorArithmetic<T>> extends StatefulWidget {
 class _DriverState<T extends VectorArithmetic<T>> extends State<_Host<T>> {
   late T _value = widget.initial;
 
-  void update(
-    T newValue, {
-    AnimationSpec? animation,
-    bool disabled = false,
-  }) {
+  void update(T newValue, {AnimationSpec? animation, bool disabled = false}) {
     final body = () => setState(() => _value = newValue);
     if (disabled) {
       withTransaction(const Transaction(disablesAnimations: true), body);
@@ -289,7 +285,7 @@ void main() {
 
     await tester.pumpWidget(
       _Host<AnimatableOffset>(
-        initial: AnimatableOffset(0, 0),
+        initial: AnimatableOffset(Offset.zero),
         onReady: (d) => driver = d,
         onBuild: (v) => builds.add(v),
       ),
@@ -297,28 +293,34 @@ void main() {
     await tester.pump();
 
     driver.update(
-      AnimatableOffset(100, 200),
+      AnimatableOffset(const Offset(100, 200)),
       animation: AnimationSpec(
         BezierAnimation.linear(const Duration(seconds: 1)),
       ),
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
-    expect(builds.last.dx, closeTo(50, 10));
-    expect(builds.last.dy, closeTo(100, 20));
+    expect(builds.last.value.dx, closeTo(50, 10));
+    expect(builds.last.value.dy, closeTo(100, 20));
 
     await tester.pump(const Duration(milliseconds: 700));
-    expect(builds.last.dx, closeTo(100, 1e-9));
-    expect(builds.last.dy, closeTo(200, 1e-9));
+    expect(builds.last.value.dx, closeTo(100, 1e-9));
+    expect(builds.last.value.dy, closeTo(200, 1e-9));
   });
 
-  testWidgets('AnimatableColor animates component-wise', (tester) async {
+  testWidgets('AnimatableColor animates component-wise in linear sRGB', (
+    tester,
+  ) async {
     final builds = <AnimatableColor>[];
     late _DriverState<AnimatableColor> driver;
 
+    // Animate opaque black → opaque mid-grey (in linear sRGB). All four
+    // channels are stored as 0..1 floats; we read them directly.
     await tester.pumpWidget(
       _Host<AnimatableColor>(
-        initial: AnimatableColor(255, 0, 0, 0),
+        initial: AnimatableColor(
+          const Color.from(alpha: 1, red: 0, green: 0, blue: 0),
+        ),
         onReady: (d) => driver = d,
         onBuild: (v) => builds.add(v),
       ),
@@ -326,16 +328,19 @@ void main() {
     await tester.pump();
 
     driver.update(
-      AnimatableColor(255, 200, 200, 200),
+      AnimatableColor(
+        const Color.from(alpha: 1, red: 0.5, green: 0.5, blue: 0.5),
+      ),
       animation: AnimationSpec(
         BezierAnimation.linear(const Duration(seconds: 1)),
       ),
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 1200));
-    expect(builds.last.r, closeTo(200, 1e-6));
-    expect(builds.last.g, closeTo(200, 1e-6));
-    expect(builds.last.b, closeTo(200, 1e-6));
+    expect(builds.last.value.r, closeTo(0.5, 1e-6));
+    expect(builds.last.value.g, closeTo(0.5, 1e-6));
+    expect(builds.last.value.b, closeTo(0.5, 1e-6));
+    expect(builds.last.value.a, closeTo(1.0, 1e-6));
   });
 
   testWidgets('dispose mid-flight does not throw late callbacks', (

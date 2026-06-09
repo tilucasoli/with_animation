@@ -10,8 +10,7 @@ class _Constant extends CustomAnimation {
     T value,
     double time,
     AnimationContext<T> context,
-  ) =>
-      value.scale(fraction);
+  ) => value.scale(fraction);
 }
 
 void main() {

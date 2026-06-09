@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'animation_spec.dart';
 import 'animator_state.dart';
 import 'transaction.dart';
-import 'vector_arithmetic.dart';
+import 'animatable/vector_arithmetic.dart';
 
 /// Wraps a logical value of type [T] and animates changes to it.
 ///
@@ -36,7 +36,8 @@ class AnimatableValue<T extends VectorArithmetic<T>> extends StatefulWidget {
 }
 
 class _AnimatableValueState<T extends VectorArithmetic<T>>
-    extends State<AnimatableValue<T>> with SingleTickerProviderStateMixin {
+    extends State<AnimatableValue<T>>
+    with SingleTickerProviderStateMixin {
   late final Ticker _ticker;
   AnimatorState<T>? _animator;
   late T _previous; // start of the current animator's interval

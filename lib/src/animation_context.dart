@@ -1,4 +1,4 @@
-import 'vector_arithmetic.dart';
+import 'animatable/vector_arithmetic.dart';
 
 /// Typed scratch storage that survives across `animate` calls within a single
 /// animation instance. Mirror of SwiftUI's `AnimationState` +
@@ -16,5 +16,5 @@ class AnimationContext<T extends VectorArithmetic<T>> {
   bool isLogicallyComplete;
 
   AnimationContext({AnimationState? state, this.isLogicallyComplete = false})
-      : state = state ?? AnimationState();
+    : state = state ?? AnimationState();
 }

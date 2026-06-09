@@ -1,5 +1,5 @@
-import 'animation_context.dart';
-import 'vector_arithmetic.dart';
+import '../animation_context.dart';
+import '../animatable/vector_arithmetic.dart';
 
 /// "Where on the curve am I at time `time`, for an interval `value`?"
 ///
@@ -18,6 +18,5 @@ abstract class CustomAnimation {
     T value,
     double time,
     AnimationContext<T> context,
-  ) =>
-      false;
+  ) => false;
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 
 import 'animation_spec.dart';
@@ -49,4 +50,5 @@ T _withTransaction<T>(Transaction t, T Function() body) {
 }
 
 /// Internal: how [AnimatableValue] reads the current transaction.
+@internal
 Transaction? currentTransaction() => _TransactionStack.pending;

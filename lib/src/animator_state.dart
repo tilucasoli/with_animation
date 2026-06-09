@@ -1,6 +1,6 @@
 import 'animation_context.dart';
 import 'animation_spec.dart';
-import 'vector_arithmetic.dart';
+import 'animatable/vector_arithmetic.dart';
 
 /// Drives a single in-flight animation for one [AnimatableValue]. Mirror of
 /// SwiftUI's `AnimatorState` — kept as a pure value-producer (no ticker).

@@ -1,11 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:with_animation/src/transaction.dart';
 import 'package:with_animation/with_animation.dart'
     show
         AnimationSpec,
         BezierAnimation,
         Transaction,
-        currentTransaction,
         withAnimation,
         withTransaction;
 

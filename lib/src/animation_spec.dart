@@ -1,6 +1,9 @@
-import 'bezier_animation.dart';
-import 'custom_animation.dart';
-import 'spring_animation.dart';
+import 'custom_animation/bezier_animation.dart';
+import 'custom_animation/custom_animation.dart';
+import 'custom_animation/fluid_spring_animation.dart';
+import 'custom_animation/repeat_animation.dart';
+import 'custom_animation/speed_animation.dart';
+import 'custom_animation/spring_animation.dart';
 
 /// Type-erased animation handle. Mirror of SwiftUI's `Animation` struct.
 ///
@@ -29,4 +32,83 @@ class AnimationSpec {
   }) => AnimationSpec(
     SpringAnimation(mass: mass, stiffness: stiffness, damping: damping),
   );
+
+  /// Modern SwiftUI spring parameterised by perceptual duration and damping.
+  /// Mirror of `Animation.spring(response:dampingFraction:blendDuration:)`.
+  static AnimationSpec fluidSpring({
+    double response = 0.5,
+    double dampingFraction = 0.825,
+    double blendDuration = 0,
+  }) => AnimationSpec(
+    FluidSpringAnimation(
+      response: response,
+      dampingFraction: dampingFraction,
+      blendDuration: blendDuration,
+    ),
+  );
+
+  /// A smooth, non-bouncy spring. Mirror of SwiftUI's `Animation.smooth`.
+  static AnimationSpec smooth({
+    double duration = 0.5,
+    double extraBounce = 0.0,
+  }) => fluidSpring(
+    response: duration,
+    dampingFraction: fluidSpringDampingFraction(extraBounce),
+  );
+
+  /// A slightly bouncy spring. Mirror of SwiftUI's `Animation.snappy`.
+  static AnimationSpec snappy({
+    double duration = 0.5,
+    double extraBounce = 0.0,
+  }) => fluidSpring(
+    response: duration,
+    dampingFraction: fluidSpringDampingFraction(0.15 + extraBounce),
+  );
+
+  /// A noticeably bouncy spring. Mirror of SwiftUI's `Animation.bouncy`.
+  static AnimationSpec bouncy({
+    double duration = 0.5,
+    double extraBounce = 0.0,
+  }) => fluidSpring(
+    response: duration,
+    dampingFraction: fluidSpringDampingFraction(0.3 + extraBounce),
+  );
+
+  /// A short, responsive spring tuned for driving interactive gestures.
+  /// Mirror of SwiftUI's `Animation.interactiveSpring`.
+  static AnimationSpec interactiveSpring({
+    double response = 0.15,
+    double dampingFraction = 0.86,
+    double blendDuration = 0.25,
+  }) => fluidSpring(
+    response: response,
+    dampingFraction: dampingFraction,
+    blendDuration: blendDuration,
+  );
+
+  /// Repeats the animation [count] times, optionally reversing on every
+  /// other cycle. Mirror of SwiftUI's `Animation.repeatCount`.
+  AnimationSpec repeatCount(int count, {bool autoreverses = true}) =>
+      AnimationSpec(
+        RepeatAnimation(
+          base: base,
+          repeatCount: count.toDouble(),
+          autoreverses: autoreverses,
+        ),
+      );
+
+  /// Repeats the animation indefinitely. Mirror of SwiftUI's
+  /// `Animation.repeatForever`.
+  AnimationSpec repeatForever({bool autoreverses = true}) => AnimationSpec(
+    RepeatAnimation(
+      base: base,
+      repeatCount: double.infinity,
+      autoreverses: autoreverses,
+    ),
+  );
+
+  /// Scales the time axis of the animation. `> 1` plays faster, `< 1` plays
+  /// slower. Mirror of SwiftUI's `Animation.speed`.
+  AnimationSpec speed(double speed) =>
+      AnimationSpec(SpeedAnimation(base: base, speed: speed));
 }

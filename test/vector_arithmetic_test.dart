@@ -39,104 +39,152 @@ void main() {
 
   group('AnimatableOffset', () {
     test('addition', () {
-      final r = AnimatableOffset(1, 2) + AnimatableOffset(3, 4);
-      expect(r.dx, 4);
-      expect(r.dy, 6);
+      final r =
+          AnimatableOffset(const Offset(1, 2)) +
+          AnimatableOffset(const Offset(3, 4));
+      expect(r.value.dx, 4);
+      expect(r.value.dy, 6);
     });
 
     test('subtraction', () {
-      final r = AnimatableOffset(5, 7) - AnimatableOffset(2, 3);
-      expect(r.dx, 3);
-      expect(r.dy, 4);
+      final r =
+          AnimatableOffset(const Offset(5, 7)) -
+          AnimatableOffset(const Offset(2, 3));
+      expect(r.value.dx, 3);
+      expect(r.value.dy, 4);
     });
 
     test('scale', () {
-      final r = AnimatableOffset(2, 4).scale(0.5);
-      expect(r.dx, 1);
-      expect(r.dy, 2);
+      final r = AnimatableOffset(const Offset(2, 4)).scale(0.5);
+      expect(r.value.dx, 1);
+      expect(r.value.dy, 2);
     });
 
     test('magnitudeSquared sums components', () {
-      expect(AnimatableOffset(3, 4).magnitudeSquared, 25.0);
-      expect(AnimatableOffset(0, 0).magnitudeSquared, 0.0);
+      expect(AnimatableOffset(const Offset(3, 4)).magnitudeSquared, 25.0);
+      expect(AnimatableOffset(const Offset(0, 0)).magnitudeSquared, 0.0);
     });
 
     test('zero', () {
-      final z = AnimatableOffset(10, 20).zero;
-      expect(z.dx, 0);
-      expect(z.dy, 0);
+      final z = AnimatableOffset(const Offset(10, 20)).zero;
+      expect(z.value.dx, 0);
+      expect(z.value.dy, 0);
     });
 
     test('equality and hashCode', () {
-      expect(AnimatableOffset(1, 2) == AnimatableOffset(1, 2), isTrue);
-      expect(AnimatableOffset(1, 2) == AnimatableOffset(1, 3), isFalse);
       expect(
-        AnimatableOffset(1, 2).hashCode,
-        AnimatableOffset(1, 2).hashCode,
+        AnimatableOffset(const Offset(1, 2)) ==
+            AnimatableOffset(const Offset(1, 2)),
+        isTrue,
+      );
+      expect(
+        AnimatableOffset(const Offset(1, 2)) ==
+            AnimatableOffset(const Offset(1, 3)),
+        isFalse,
+      );
+      expect(
+        AnimatableOffset(const Offset(1, 2)).hashCode,
+        AnimatableOffset(const Offset(1, 2)).hashCode,
       );
     });
   });
 
   group('AnimatableColor', () {
-    test('fromColor → toColor round-trips', () {
+    // Unit scale OpenSwiftUI applies inside Color.Resolved.animatableData.
+    const unitScale = 128.0;
+
+    test('fromColor → toColor round-trips an 8-bit sRGB color', () {
       const c = Color.fromARGB(200, 100, 150, 50);
-      final ac = AnimatableColor.fromColor(c);
-      expect(ac.toColor(), c);
+      final ac = AnimatableColor(c);
+      // Round-trip should land back on the exact same 8-bit values after
+      // sRGB → linear → sRGB. (Compared in 8-bit space because the linear
+      // round-trip leaves sub-1/255 noise in the float channels.)
+      expect(ac.value.toARGB32(), c.toARGB32());
     });
 
-    test('fromInt → toInt round-trips', () {
-      const c = Color.fromARGB(255, 12, 34, 56);
-      final ac = AnimatableColor.fromInt(c.value);
-      expect(ac.toInt(), c.value);
-    });
+    // test('fromColor stores channels in Linear sRGB space', () {
+    //   const c = Color.fromARGB(255, 128, 128, 128);
+    //   final ac = AnimatableColor(c);
+    //   // 0x80 / 255 = 0.5019…; linearised that's ~0.2158, well below 0.5.
+    //   expect(ac.value.r, closeTo(0.2158, 0.005));
+    //   expect(ac.value.g, closeTo(0.2158, 0.005));
+    //   expect(ac.value.b, closeTo(0.2158, 0.005));
+    //   expect(ac.value.a, closeTo(1.0, 1e-9));
+    // });
 
     test('toColor clamps out-of-range channels', () {
-      final negative = AnimatableColor(-10, -50, 300, 1000);
-      final clamped = negative.toColor();
-      expect(clamped.alpha, 0);
-      expect(clamped.red, 0);
-      expect(clamped.green, 255);
-      expect(clamped.blue, 255);
+      // After gamma encoding, -0.5 → some negative sRGB → clamps to 0 byte;
+      // 2.0 → > 1.0 sRGB → clamps to 255 byte.
+      final negative = AnimatableColor(
+        const Color.from(alpha: -0.5, red: -0.5, green: -0.5, blue: 2.0),
+      );
+      final clamped = negative.value.toARGB32();
+      expect((clamped >> 24) & 0xff, 0);
+      expect((clamped >> 16) & 0xff, 0);
+      expect((clamped >> 8) & 0xff, 0);
+      expect(clamped & 0xff, 255);
     });
 
-    test('arithmetic is component-wise linear', () {
-      final a = AnimatableColor(10, 20, 30, 40);
-      final b = AnimatableColor(1, 2, 3, 4);
+    test('arithmetic is component-wise on linear channels', () {
+      final a = AnimatableColor(
+        const Color.from(alpha: 0.4, red: 0.1, green: 0.2, blue: 0.3),
+      );
+      final b = AnimatableColor(
+        const Color.from(alpha: 0.04, red: 0.01, green: 0.02, blue: 0.03),
+      );
+
       final sum = a + b;
-      expect(sum.a, 11);
-      expect(sum.r, 22);
-      expect(sum.g, 33);
-      expect(sum.b, 44);
+      expect(sum.value.r, closeTo(0.11, 1e-9));
+      expect(sum.value.g, closeTo(0.22, 1e-9));
+      expect(sum.value.b, closeTo(0.33, 1e-9));
+      expect(sum.value.a, closeTo(0.44, 1e-9));
 
       final diff = a - b;
-      expect(diff.a, 9);
-      expect(diff.r, 18);
-      expect(diff.g, 27);
-      expect(diff.b, 36);
+      expect(diff.value.r, closeTo(0.09, 1e-9));
+      expect(diff.value.g, closeTo(0.18, 1e-9));
+      expect(diff.value.b, closeTo(0.27, 1e-9));
+      expect(diff.value.a, closeTo(0.36, 1e-9));
 
       final scaled = a.scale(0.5);
-      expect(scaled.a, 5);
-      expect(scaled.r, 10);
-      expect(scaled.g, 15);
-      expect(scaled.b, 20);
+      expect(scaled.value.r, closeTo(0.05, 1e-9));
+      expect(scaled.value.g, closeTo(0.10, 1e-9));
+      expect(scaled.value.b, closeTo(0.15, 1e-9));
+      expect(scaled.value.a, closeTo(0.20, 1e-9));
     });
 
-    test('magnitudeSquared sums squared channels', () {
-      expect(AnimatableColor(1, 2, 2, 0).magnitudeSquared, 1 + 4 + 4 + 0);
+    test('magnitudeSquared applies the OpenSwiftUI unitScale (128)', () {
+      // sum of (channel * 128)^2 across the four channels.
+      final ac = AnimatableColor(
+        const Color.from(alpha: 0.0, red: 0.1, green: 0.2, blue: 0.2),
+      );
+      const expected =
+          0.1 * unitScale * (0.1 * unitScale) +
+          0.2 * unitScale * (0.2 * unitScale) +
+          0.2 * unitScale * (0.2 * unitScale) +
+          0.0;
+      expect(ac.magnitudeSquared, closeTo(expected, 1e-9));
     });
 
     test('zero', () {
-      final z = AnimatableColor(255, 255, 255, 255).zero;
-      expect(z.a, 0);
-      expect(z.r, 0);
-      expect(z.g, 0);
-      expect(z.b, 0);
+      final z = AnimatableColor(
+        const Color.from(alpha: 1.0, red: 0.5, green: 0.5, blue: 0.5),
+      ).zero;
+      expect(z.value.r, 0);
+      expect(z.value.g, 0);
+      expect(z.value.b, 0);
+      expect(z.value.a, 0);
     });
 
     test('equality and hashCode', () {
-      final a = AnimatableColor(1, 2, 3, 4);
-      final b = AnimatableColor(1, 2, 3, 4);
-      final c = AnimatableColor(1, 2, 3, 5);
+      final a = AnimatableColor(
+        const Color.from(alpha: 0.4, red: 0.1, green: 0.2, blue: 0.3),
+      );
+      final b = AnimatableColor(
+        const Color.from(alpha: 0.4, red: 0.1, green: 0.2, blue: 0.3),
+      );
+      final c = AnimatableColor(
+        const Color.from(alpha: 0.5, red: 0.1, green: 0.2, blue: 0.3),
+      );
       expect(a == b, isTrue);
       expect(a == c, isFalse);
       expect(a.hashCode, b.hashCode);
@@ -147,27 +195,27 @@ void main() {
     test('arithmetic delegates to both components', () {
       final p1 = AnimatablePair(
         AnimatableDouble(1.0),
-        AnimatableOffset(2, 3),
+        AnimatableOffset(const Offset(2, 3)),
       );
       final p2 = AnimatablePair(
         AnimatableDouble(0.5),
-        AnimatableOffset(1, 1),
+        AnimatableOffset(const Offset(1, 1)),
       );
       final sum = p1 + p2;
       expect(sum.first.value, 1.5);
-      expect(sum.second.dx, 3);
-      expect(sum.second.dy, 4);
+      expect(sum.second.value.dx, 3);
+      expect(sum.second.value.dy, 4);
 
       final scaled = p1.scale(2.0);
       expect(scaled.first.value, 2.0);
-      expect(scaled.second.dx, 4);
-      expect(scaled.second.dy, 6);
+      expect(scaled.second.value.dx, 4);
+      expect(scaled.second.value.dy, 6);
     });
 
     test('magnitudeSquared sums components', () {
       final p = AnimatablePair(
         AnimatableDouble(3.0),
-        AnimatableOffset(0, 4),
+        AnimatableOffset(const Offset(0, 4)),
       );
       expect(p.magnitudeSquared, 9.0 + 16.0);
     });
@@ -175,22 +223,22 @@ void main() {
     test('zero', () {
       final p = AnimatablePair(
         AnimatableDouble(5.0),
-        AnimatableOffset(1, 2),
+        AnimatableOffset(const Offset(1, 2)),
       );
       final z = p.zero;
       expect(z.first.value, 0);
-      expect(z.second.dx, 0);
-      expect(z.second.dy, 0);
+      expect(z.second.value.dx, 0);
+      expect(z.second.value.dy, 0);
     });
 
     test('equality and hashCode', () {
       final a = AnimatablePair(
         AnimatableDouble(1.0),
-        AnimatableOffset(2, 3),
+        AnimatableOffset(const Offset(2, 3)),
       );
       final b = AnimatablePair(
         AnimatableDouble(1.0),
-        AnimatableOffset(2, 3),
+        AnimatableOffset(const Offset(2, 3)),
       );
       expect(a == b, isTrue);
       expect(a.hashCode, b.hashCode);

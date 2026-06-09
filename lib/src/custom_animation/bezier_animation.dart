@@ -1,8 +1,8 @@
 import 'package:flutter/animation.dart' show Cubic, Curve, Curves;
 
-import 'animation_context.dart';
+import '../animation_context.dart';
 import 'custom_animation.dart';
-import 'vector_arithmetic.dart';
+import '../animatable/vector_arithmetic.dart';
 
 /// Cubic-Bezier eased animation. Backs `Animation.easeIn` / `easeOut` /
 /// `easeInOut` / `linear`. Reuses Flutter's `Cubic` curve evaluator since

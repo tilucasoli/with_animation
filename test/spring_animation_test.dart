@@ -3,7 +3,8 @@ import 'package:with_animation/with_animation.dart';
 
 void main() {
   AnimatableDouble v(double x) => AnimatableDouble(x);
-  AnimationContext<AnimatableDouble> ctx() => AnimationContext<AnimatableDouble>();
+  AnimationContext<AnimatableDouble> ctx() =>
+      AnimationContext<AnimatableDouble>();
 
   group('underdamped spring (default)', () {
     final a = SpringAnimation(mass: 1, stiffness: 100, damping: 10);
@@ -81,11 +82,7 @@ void main() {
 
   group('initialVelocity', () {
     test('non-zero initial velocity changes early trajectory', () {
-      final still = SpringAnimation(
-        mass: 1,
-        stiffness: 100,
-        damping: 10,
-      );
+      final still = SpringAnimation(mass: 1, stiffness: 100, damping: 10);
       final moving = SpringAnimation(
         mass: 1,
         stiffness: 100,

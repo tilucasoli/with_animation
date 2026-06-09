@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
-import 'animation_context.dart';
+import '../animation_context.dart';
 import 'custom_animation.dart';
-import 'vector_arithmetic.dart';
+import '../animatable/vector_arithmetic.dart';
 
 /// Damped-spring animation. Closed-form `1 - amp * decay` evaluator ported
 /// from OpenSwiftUI's `Sources/.../Spring/SpringAnimation.swift`.
@@ -21,8 +21,9 @@ class SpringAnimation extends CustomAnimation {
 
   late final double _angularFreq = math.sqrt(stiffness / mass);
   late final double _zeta = damping / (2 * math.sqrt(mass * stiffness));
-  late final double _decay =
-      _zeta < 1 ? _angularFreq * math.sqrt(1 - _zeta * _zeta) : 0;
+  late final double _decay = _zeta < 1
+      ? _angularFreq * math.sqrt(1 - _zeta * _zeta)
+      : 0;
   late final double _adjusted = _zeta >= 1
       ? _angularFreq - initialVelocity
       : (_angularFreq * _zeta - initialVelocity) / _decay;
@@ -33,9 +34,7 @@ class SpringAnimation extends CustomAnimation {
       return 1 - amp * math.exp(-t * _angularFreq);
     }
     final amp = math.exp(-_zeta * _angularFreq * t);
-    return 1 -
-        amp *
-            (math.cos(_decay * t) + _adjusted * math.sin(_decay * t));
+    return 1 - amp * (math.cos(_decay * t) + _adjusted * math.sin(_decay * t));
   }
 
   @override

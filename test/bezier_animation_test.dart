@@ -3,7 +3,8 @@ import 'package:with_animation/with_animation.dart';
 
 void main() {
   AnimatableDouble v(double x) => AnimatableDouble(x);
-  AnimationContext<AnimatableDouble> ctx() => AnimationContext<AnimatableDouble>();
+  AnimationContext<AnimatableDouble> ctx() =>
+      AnimationContext<AnimatableDouble>();
 
   group('BezierAnimation.linear', () {
     final a = BezierAnimation.linear(const Duration(seconds: 1));
