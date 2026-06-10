@@ -4,23 +4,24 @@
 /// and scale by a `double`. `magnitudeSquared` is used by spring physics to
 /// detect "settled" state.
 abstract class VectorArithmetic<Self extends VectorArithmetic<Self>> {
+  double get magnitudeSquared;
+  Self get zero;
+
+  const VectorArithmetic();
+
   Self operator +(Self other);
   Self operator -(Self other);
   Self scale(double factor);
-  double get magnitudeSquared;
-  Self get zero;
 }
 
 /// Composes two [VectorArithmetic] values into one, so a pair of independent
 /// axes can be animated together as a single projection.
-class VectorPair<
-  A extends VectorArithmetic<A>,
-  B extends VectorArithmetic<B>
->
+class VectorPair<A extends VectorArithmetic<A>, B extends VectorArithmetic<B>>
     extends VectorArithmetic<VectorPair<A, B>> {
-  A first;
-  B second;
-  VectorPair(this.first, this.second);
+  final A first;
+  final B second;
+
+  const VectorPair(this.first, this.second);
 
   @override
   VectorPair<A, B> operator +(VectorPair<A, B> o) =>
