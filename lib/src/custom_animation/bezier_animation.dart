@@ -4,9 +4,8 @@ import '../animation_context.dart';
 import 'custom_animation.dart';
 import '../animatable/vector_arithmetic.dart';
 
-/// Cubic-Bezier eased animation. Backs `Animation.easeIn` / `easeOut` /
-/// `easeInOut` / `linear`. Reuses Flutter's `Cubic` curve evaluator since
-/// it's mathematically identical to OpenSwiftUI's `UnitCurve.CubicSolver`.
+/// Cubic-Bezier eased animation. Backs `Animations.easeIn` / `easeOut` /
+/// `easeInOut` / `linear` by delegating to Flutter's `Cubic` curve evaluator.
 class BezierAnimation extends CustomAnimation {
   final Curve curve;
   final Duration duration;
@@ -23,7 +22,7 @@ class BezierAnimation extends CustomAnimation {
       BezierAnimation(curve: const Cubic(0.42, 0, 0.58, 1.0), duration: d);
 
   @override
-  T? animate<T extends CustomVectorArithmetic<T>>(
+  T? animate<T extends VectorArithmetic<T>>(
     T value,
     double time,
     AnimationContext<T> ctx,

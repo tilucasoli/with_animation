@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 
-import 'animation_spec.dart';
+import 'animations.dart';
 
 class Transaction {
-  final AnimationSpec? animation;
+  final Animations? animation;
   final bool disablesAnimations;
 
   const Transaction({this.animation, this.disablesAnimations = false});
@@ -19,9 +19,9 @@ class _TransactionStack {
 }
 
 /// Run [body] with [animation] as the active animation for any state changes
-/// it triggers. Use synchronously inside `setState` callbacks for the same
-/// idiom as SwiftUI's `withAnimation`.
-T withAnimation<T>(AnimationSpec animation, T Function() body) =>
+/// it triggers. Call synchronously inside `setState` callbacks so any
+/// [AnimatableValue] that rebuilds during the frame picks it up.
+T withAnimation<T>(Animations animation, T Function() body) =>
     _withTransaction(Transaction(animation: animation), body);
 
 T withTransaction<T>(Transaction transaction, T Function() body) =>

@@ -4,12 +4,10 @@ import '../animation_context.dart';
 import 'custom_animation.dart';
 import '../animatable/vector_arithmetic.dart';
 
-/// Modern SwiftUI-style spring. Port of OpenSwiftUI's
-/// `Sources/.../Spring/FluidSpringAnimation.swift`.
+/// Perceptually parameterised spring.
 ///
-/// Backs `Animation.spring(response:dampingFraction:blendDuration:)` and the
-/// presets `smooth`, `snappy`, `bouncy`, and `interactiveSpring`. Parameters
-/// are perceptual:
+/// Backs `Animations.fluidSpring` and the presets `smooth`, `snappy`,
+/// `bouncy`, and `interactiveSpring`. Parameters are perceptual:
 ///
 /// * [response] — approximate "duration" / pace of the spring (seconds).
 /// * [dampingFraction] — drag as a fraction of critical damping. `1` is
@@ -30,7 +28,7 @@ class FluidSpringAnimation extends CustomAnimation {
   static const double _maxStiffness = 45000.0;
 
   @override
-  T? animate<T extends CustomVectorArithmetic<T>>(
+  T? animate<T extends VectorArithmetic<T>>(
     T value,
     double time,
     AnimationContext<T> ctx,
@@ -47,8 +45,7 @@ class FluidSpringAnimation extends CustomAnimation {
 
     final double r;
     if (blendDuration > 0 && state.blendInterval != 0) {
-      // Literal port: in the source `.clamp(...)` binds to `blendDuration`,
-      // not to the whole division, so the divisor is the clamped duration.
+      // Divisor is the clamped blend duration, not the unclamped delta.
       final clampedBlend = blendDuration.clamp(0.0, 1.0);
       final progress = (time - state.blendStart) / clampedBlend;
       final smoothstep = 1.0 - progress * progress * (3.0 - progress * 2.0);
@@ -103,7 +100,7 @@ class FluidSpringAnimation extends CustomAnimation {
   }
 }
 
-class _FluidSpringState<T extends CustomVectorArithmetic<T>> {
+class _FluidSpringState<T extends VectorArithmetic<T>> {
   T offset;
   T velocity;
   T force;
@@ -126,8 +123,8 @@ class _FluidSpringState<T extends CustomVectorArithmetic<T>> {
 double _springDamping(double fraction, double stiffness) =>
     2 * math.sqrt(stiffness) * fraction;
 
-/// Maps SwiftUI's `bounce` parameter onto a damping fraction. `bounce == 0`
+/// Maps a perceptual `bounce` parameter onto a damping fraction. `bounce == 0`
 /// yields critical damping (1.0), positive values bounce, negative values
-/// overdamp. Mirror of OpenSwiftUI's `springDampingFraction(bounce:)`.
+/// overdamp.
 double fluidSpringDampingFraction(double bounce) =>
     bounce < 0 ? 1.0 / (bounce + 1.0) : 1.0 - bounce;

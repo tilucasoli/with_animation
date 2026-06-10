@@ -5,8 +5,8 @@ import 'package:with_animation/with_animation.dart';
 void main() {
   group('AnimatorState.sample', () {
     test('returns zero delta at beginTime for a bezier animation', () {
-      final state = AnimatorState<AnimatableDouble>(
-        animation: AnimationSpec(
+      final state = AnimationDriver<AnimatableDouble>(
+        animation: Animations(
           BezierAnimation.linear(const Duration(seconds: 1)),
         ),
         interval: AnimatableDouble(10.0),
@@ -18,8 +18,8 @@ void main() {
     });
 
     test('returns full interval at end of duration', () {
-      final state = AnimatorState<AnimatableDouble>(
-        animation: AnimationSpec(
+      final state = AnimationDriver<AnimatableDouble>(
+        animation: Animations(
           BezierAnimation.linear(const Duration(seconds: 1)),
         ),
         interval: AnimatableDouble(10.0),
@@ -31,8 +31,8 @@ void main() {
     });
 
     test('returns null after duration elapses', () {
-      final state = AnimatorState<AnimatableDouble>(
-        animation: AnimationSpec(
+      final state = AnimationDriver<AnimatableDouble>(
+        animation: Animations(
           BezierAnimation.linear(const Duration(seconds: 1)),
         ),
         interval: AnimatableDouble(10.0),
@@ -42,15 +42,15 @@ void main() {
     });
 
     test('beginTime shifts the curve', () {
-      final shifted = AnimatorState<AnimatableDouble>(
-        animation: AnimationSpec(
+      final shifted = AnimationDriver<AnimatableDouble>(
+        animation: Animations(
           BezierAnimation.linear(const Duration(seconds: 1)),
         ),
         interval: AnimatableDouble(1.0),
         beginTime: const Duration(seconds: 1),
       );
-      final zero = AnimatorState<AnimatableDouble>(
-        animation: AnimationSpec(
+      final zero = AnimationDriver<AnimatableDouble>(
+        animation: Animations(
           BezierAnimation.linear(const Duration(seconds: 1)),
         ),
         interval: AnimatableDouble(1.0),
@@ -64,8 +64,8 @@ void main() {
     });
 
     test('context persists across sample calls', () {
-      final state = AnimatorState<AnimatableDouble>(
-        animation: AnimationSpec(
+      final state = AnimationDriver<AnimatableDouble>(
+        animation: Animations(
           BezierAnimation.linear(const Duration(seconds: 1)),
         ),
         interval: AnimatableDouble(1.0),

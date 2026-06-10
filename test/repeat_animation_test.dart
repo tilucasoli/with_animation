@@ -105,7 +105,7 @@ void main() {
 
   group('AnimationSpec modifiers', () {
     test('repeatCount wraps the base into a RepeatAnimation', () {
-      final spec = AnimationSpec.linear(
+      final spec = Animations.linear(
         duration: const Duration(seconds: 1),
       ).repeatCount(2, autoreverses: false);
       expect(spec.base, isA<RepeatAnimation>());
@@ -115,7 +115,7 @@ void main() {
     });
 
     test('repeatForever uses infinity', () {
-      final spec = AnimationSpec.linear().repeatForever();
+      final spec = Animations.linear().repeatForever();
       expect(spec.base, isA<RepeatAnimation>());
       expect((spec.base as RepeatAnimation).repeatCount, double.infinity);
     });

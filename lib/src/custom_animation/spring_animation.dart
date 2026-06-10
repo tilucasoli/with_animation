@@ -4,8 +4,7 @@ import '../animation_context.dart';
 import 'custom_animation.dart';
 import '../animatable/vector_arithmetic.dart';
 
-/// Damped-spring animation. Closed-form `1 - amp * decay` evaluator ported
-/// from OpenSwiftUI's `Sources/.../Spring/SpringAnimation.swift`.
+/// Damped-spring animation built on a closed-form `1 - amp * decay` evaluator.
 class SpringAnimation extends CustomAnimation {
   final double mass;
   final double stiffness;
@@ -38,7 +37,7 @@ class SpringAnimation extends CustomAnimation {
   }
 
   @override
-  T? animate<T extends CustomVectorArithmetic<T>>(
+  T? animate<T extends VectorArithmetic<T>>(
     T value,
     double time,
     AnimationContext<T> ctx,
