@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:with_animation/with_animation.dart';
 
 void main() {
-  DoubleVectorArithmetic v(double x) => DoubleVectorArithmetic(x);
-  AnimationContext<DoubleVectorArithmetic> ctx() =>
-      AnimationContext<DoubleVectorArithmetic>();
+  AnimatableDouble v(double x) => AnimatableDouble(x);
+  AnimationContext<AnimatableDouble> ctx() =>
+      AnimationContext<AnimatableDouble>();
 
   group('SpeedAnimation', () {
     test('speed = 2 finishes in half the wall-clock time', () {
@@ -48,13 +48,13 @@ void main() {
 
   group('AnimationSpec.speed modifier', () {
     test('wraps the base into a SpeedAnimation', () {
-      final spec = AnimationSpec.linear().speed(3.0);
+      final spec = Animations.linear().speed(3.0);
       expect(spec.base, isA<SpeedAnimation>());
       expect((spec.base as SpeedAnimation).speed, 3.0);
     });
 
     test('chains with repeatCount', () {
-      final spec = AnimationSpec.linear(
+      final spec = Animations.linear(
         duration: const Duration(seconds: 1),
       ).speed(2.0).repeatCount(2);
       expect(spec.base, isA<RepeatAnimation>());

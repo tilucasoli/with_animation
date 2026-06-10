@@ -9,8 +9,7 @@ class _RepeatState {
 }
 
 /// Wraps a [CustomAnimation] and replays it `repeatCount` times, optionally
-/// alternating direction. Mirror of OpenSwiftUI's `RepeatAnimation` /
-/// `Animation.repeatCount` / `Animation.repeatForever`.
+/// alternating direction.
 ///
 /// Use `double.infinity` for [repeatCount] to repeat forever.
 class RepeatAnimation extends CustomAnimation {
@@ -25,7 +24,7 @@ class RepeatAnimation extends CustomAnimation {
   });
 
   @override
-  T? animate<T extends CustomVectorArithmetic<T>>(
+  T? animate<T extends VectorArithmetic<T>>(
     T value,
     double time,
     AnimationContext<T> context,

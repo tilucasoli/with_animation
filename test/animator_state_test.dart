@@ -5,11 +5,11 @@ import 'package:with_animation/with_animation.dart';
 void main() {
   group('AnimatorState.sample', () {
     test('returns zero delta at beginTime for a bezier animation', () {
-      final state = AnimatorState<DoubleVectorArithmetic>(
-        animation: AnimationSpec(
+      final state = AnimationDriver<AnimatableDouble>(
+        animation: Animations(
           BezierAnimation.linear(const Duration(seconds: 1)),
         ),
-        interval: DoubleVectorArithmetic(10.0),
+        interval: AnimatableDouble(10.0),
         beginTime: Duration.zero,
       );
       final delta = state.sample(Duration.zero);
@@ -18,11 +18,11 @@ void main() {
     });
 
     test('returns full interval at end of duration', () {
-      final state = AnimatorState<DoubleVectorArithmetic>(
-        animation: AnimationSpec(
+      final state = AnimationDriver<AnimatableDouble>(
+        animation: Animations(
           BezierAnimation.linear(const Duration(seconds: 1)),
         ),
-        interval: DoubleVectorArithmetic(10.0),
+        interval: AnimatableDouble(10.0),
         beginTime: Duration.zero,
       );
       final delta = state.sample(const Duration(seconds: 1));
@@ -31,29 +31,29 @@ void main() {
     });
 
     test('returns null after duration elapses', () {
-      final state = AnimatorState<DoubleVectorArithmetic>(
-        animation: AnimationSpec(
+      final state = AnimationDriver<AnimatableDouble>(
+        animation: Animations(
           BezierAnimation.linear(const Duration(seconds: 1)),
         ),
-        interval: DoubleVectorArithmetic(10.0),
+        interval: AnimatableDouble(10.0),
         beginTime: Duration.zero,
       );
       expect(state.sample(const Duration(seconds: 2)), isNull);
     });
 
     test('beginTime shifts the curve', () {
-      final shifted = AnimatorState<DoubleVectorArithmetic>(
-        animation: AnimationSpec(
+      final shifted = AnimationDriver<AnimatableDouble>(
+        animation: Animations(
           BezierAnimation.linear(const Duration(seconds: 1)),
         ),
-        interval: DoubleVectorArithmetic(1.0),
+        interval: AnimatableDouble(1.0),
         beginTime: const Duration(seconds: 1),
       );
-      final zero = AnimatorState<DoubleVectorArithmetic>(
-        animation: AnimationSpec(
+      final zero = AnimationDriver<AnimatableDouble>(
+        animation: Animations(
           BezierAnimation.linear(const Duration(seconds: 1)),
         ),
-        interval: DoubleVectorArithmetic(1.0),
+        interval: AnimatableDouble(1.0),
         beginTime: Duration.zero,
       );
       final shiftedSample = shifted.sample(const Duration(milliseconds: 1500));
@@ -64,11 +64,11 @@ void main() {
     });
 
     test('context persists across sample calls', () {
-      final state = AnimatorState<DoubleVectorArithmetic>(
-        animation: AnimationSpec(
+      final state = AnimationDriver<AnimatableDouble>(
+        animation: Animations(
           BezierAnimation.linear(const Duration(seconds: 1)),
         ),
-        interval: DoubleVectorArithmetic(1.0),
+        interval: AnimatableDouble(1.0),
         beginTime: Duration.zero,
       );
       state.context.state.set<int>(42);

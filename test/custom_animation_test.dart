@@ -6,7 +6,7 @@ class _Constant extends CustomAnimation {
   _Constant(this.fraction);
 
   @override
-  T? animate<T extends CustomVectorArithmetic<T>>(
+  T? animate<T extends VectorArithmetic<T>>(
     T value,
     double time,
     AnimationContext<T> context,
@@ -18,21 +18,21 @@ void main() {
     test('default shouldMerge returns false', () {
       final a = _Constant(0.5);
       final b = _Constant(1.0);
-      final result = a.shouldMerge<DoubleVectorArithmetic>(
+      final result = a.shouldMerge<AnimatableDouble>(
         b,
-        DoubleVectorArithmetic(1.0),
+        AnimatableDouble(1.0),
         0.0,
-        AnimationContext<DoubleVectorArithmetic>(),
+        AnimationContext<AnimatableDouble>(),
       );
       expect(result, isFalse);
     });
 
     test('animate scales the value as expected', () {
       final a = _Constant(0.25);
-      final out = a.animate<DoubleVectorArithmetic>(
-        DoubleVectorArithmetic(8.0),
+      final out = a.animate<AnimatableDouble>(
+        AnimatableDouble(8.0),
         0.0,
-        AnimationContext<DoubleVectorArithmetic>(),
+        AnimationContext<AnimatableDouble>(),
       );
       expect(out!.value, 2.0);
     });
@@ -59,7 +59,7 @@ void main() {
     });
 
     test('context defaults isLogicallyComplete to false', () {
-      final c = AnimationContext<DoubleVectorArithmetic>();
+      final c = AnimationContext<AnimatableDouble>();
       expect(c.isLogicallyComplete, isFalse);
     });
   });

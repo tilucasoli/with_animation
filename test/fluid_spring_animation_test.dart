@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:with_animation/with_animation.dart';
 
 void main() {
-  DoubleVectorArithmetic v(double x) => DoubleVectorArithmetic(x);
-  AnimationContext<DoubleVectorArithmetic> ctx() =>
-      AnimationContext<DoubleVectorArithmetic>();
+  AnimatableDouble v(double x) => AnimatableDouble(x);
+  AnimationContext<AnimatableDouble> ctx() =>
+      AnimationContext<AnimatableDouble>();
 
   group('FluidSpringAnimation (defaults)', () {
     test('first sample is near zero offset', () {
@@ -114,34 +114,33 @@ void main() {
   });
 
   group('AnimationSpec convenience factories', () {
-    FluidSpringAnimation base(AnimationSpec s) =>
-        s.base as FluidSpringAnimation;
+    FluidSpringAnimation base(Animations s) => s.base as FluidSpringAnimation;
 
     test('fluidSpring wraps a FluidSpringAnimation with defaults', () {
-      final s = base(AnimationSpec.fluidSpring());
+      final s = base(Animations.fluidSpring());
       expect(s.response, closeTo(0.5, 1e-12));
       expect(s.dampingFraction, closeTo(0.825, 1e-12));
       expect(s.blendDuration, closeTo(0.0, 1e-12));
     });
 
     test('smooth defaults to dampingFraction 1', () {
-      final s = base(AnimationSpec.smooth());
+      final s = base(Animations.smooth());
       expect(s.response, closeTo(0.5, 1e-12));
       expect(s.dampingFraction, closeTo(1.0, 1e-12));
     });
 
     test('snappy adds 0.15 bounce', () {
-      final s = base(AnimationSpec.snappy());
+      final s = base(Animations.snappy());
       expect(s.dampingFraction, closeTo(0.85, 1e-12));
     });
 
     test('bouncy adds 0.3 bounce', () {
-      final s = base(AnimationSpec.bouncy());
+      final s = base(Animations.bouncy());
       expect(s.dampingFraction, closeTo(0.7, 1e-12));
     });
 
     test('interactiveSpring uses short response and blend duration', () {
-      final s = base(AnimationSpec.interactiveSpring());
+      final s = base(Animations.interactiveSpring());
       expect(s.response, closeTo(0.15, 1e-12));
       expect(s.dampingFraction, closeTo(0.86, 1e-12));
       expect(s.blendDuration, closeTo(0.25, 1e-12));

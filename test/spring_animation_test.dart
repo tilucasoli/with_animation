@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:with_animation/with_animation.dart';
 
 void main() {
-  DoubleVectorArithmetic v(double x) => DoubleVectorArithmetic(x);
-  AnimationContext<DoubleVectorArithmetic> ctx() =>
-      AnimationContext<DoubleVectorArithmetic>();
+  AnimatableDouble v(double x) => AnimatableDouble(x);
+  AnimationContext<AnimatableDouble> ctx() =>
+      AnimationContext<AnimatableDouble>();
 
   group('underdamped spring (default)', () {
     final a = SpringAnimation(mass: 1, stiffness: 100, damping: 10);

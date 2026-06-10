@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:with_animation/with_animation.dart';
 
 void main() {
-  DoubleVectorArithmetic v(double x) => DoubleVectorArithmetic(x);
-  AnimationContext<DoubleVectorArithmetic> ctx() =>
-      AnimationContext<DoubleVectorArithmetic>();
+  AnimatableDouble v(double x) => AnimatableDouble(x);
+  AnimationContext<AnimatableDouble> ctx() =>
+      AnimationContext<AnimatableDouble>();
 
   group('RepeatAnimation (no autoreverse)', () {
     RepeatAnimation make(int count) => RepeatAnimation(
@@ -105,7 +105,7 @@ void main() {
 
   group('AnimationSpec modifiers', () {
     test('repeatCount wraps the base into a RepeatAnimation', () {
-      final spec = AnimationSpec.linear(
+      final spec = Animations.linear(
         duration: const Duration(seconds: 1),
       ).repeatCount(2, autoreverses: false);
       expect(spec.base, isA<RepeatAnimation>());
@@ -115,7 +115,7 @@ void main() {
     });
 
     test('repeatForever uses infinity', () {
-      final spec = AnimationSpec.linear().repeatForever();
+      final spec = Animations.linear().repeatForever();
       expect(spec.base, isA<RepeatAnimation>());
       expect((spec.base as RepeatAnimation).repeatCount, double.infinity);
     });

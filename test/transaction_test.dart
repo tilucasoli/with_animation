@@ -1,9 +1,9 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart' hide Animation;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:with_animation/src/transaction.dart';
 import 'package:with_animation/with_animation.dart'
     show
-        AnimationSpec,
+        Animations,
         BezierAnimation,
         Transaction,
         withAnimation,
@@ -33,7 +33,7 @@ void main() {
 
   testWidgets('currentTransaction is set inside the body', (tester) async {
     await _drain(tester);
-    final anim = AnimationSpec.linear(duration: const Duration(seconds: 1));
+    final anim = Animations.linear(duration: const Duration(seconds: 1));
     bool sawIt = false;
     withAnimation(anim, () {
       sawIt = identical(currentTransaction()?.animation, anim);
@@ -46,7 +46,7 @@ void main() {
     'transaction persists synchronously after body returns (intentional)',
     (tester) async {
       await _drain(tester);
-      final anim = AnimationSpec(
+      final anim = Animations(
         BezierAnimation.linear(const Duration(seconds: 1)),
       );
       withAnimation(anim, () {});
@@ -60,7 +60,7 @@ void main() {
 
   testWidgets('post-frame callback clears the transaction', (tester) async {
     await _drain(tester);
-    final anim = AnimationSpec.linear(duration: const Duration(seconds: 1));
+    final anim = Animations.linear(duration: const Duration(seconds: 1));
     withAnimation(anim, () {});
     expect(currentTransaction(), isNotNull);
     // `withAnimation` adds a post-frame callback but does not request a frame,
@@ -75,15 +75,15 @@ void main() {
     tester,
   ) async {
     await _drain(tester);
-    final outer = AnimationSpec(
+    final outer = Animations(
       BezierAnimation.linear(const Duration(seconds: 1)),
     );
-    final inner = AnimationSpec(
+    final inner = Animations(
       BezierAnimation.easeIn(const Duration(seconds: 1)),
     );
 
-    AnimationSpec? insideInner;
-    AnimationSpec? afterInner;
+    Animations? insideInner;
+    Animations? afterInner;
 
     withAnimation(outer, () {
       withAnimation(inner, () {

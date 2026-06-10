@@ -1,15 +1,12 @@
-/// SwiftUI-style declarative animation primitives for Flutter.
-///
-/// See ../../Implementing-in-Flutter.md for the design walkthrough.
+/// Declarative animation primitives for Flutter.
 library;
 
-export 'src/animatable/animatable_data.dart';
-export 'src/animatable/animatable_primitives.dart';
-export 'src/animatable/empty_animatable_data.dart';
+export 'src/animatable/animatable.dart';
 export 'src/animatable_value.dart';
-export 'src/animation_spec.dart';
+export 'src/animatable/vector_arithmetic.dart';
+export 'src/animations.dart';
 export 'src/animation_context.dart';
-export 'src/animator_state.dart';
+export 'src/animation_driver.dart';
 export 'src/custom_animation/bezier_animation.dart';
 export 'src/custom_animation/custom_animation.dart';
 export 'src/custom_animation/fluid_spring_animation.dart';
@@ -17,4 +14,3 @@ export 'src/custom_animation/repeat_animation.dart';
 export 'src/custom_animation/speed_animation.dart';
 export 'src/custom_animation/spring_animation.dart';
 export 'src/transaction.dart' hide currentTransaction;
-export 'src/animatable/vector_arithmetic.dart';
