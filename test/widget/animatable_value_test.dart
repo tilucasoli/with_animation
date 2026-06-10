@@ -2,8 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:with_animation/with_animation.dart'
     show
-        AnimatableColor,
-        AnimatableDouble,
+        AnimatableData,
+        AnimatablePair,
+        DoubleVectorArithmetic,
         AnimatableOffset,
         AnimatableValue,
         AnimationSpec,
@@ -16,10 +17,14 @@ import 'package:with_animation/with_animation.dart'
 
 /// Test harness: rebuilds an [AnimatableValue] whose current `value` and
 /// `defaultAnimation` come from a host [_Driver].
-class _Host<T extends CustomVectorArithmetic<T>> extends StatefulWidget {
+class _Host<
+  T extends AnimatableData<V>,
+  V extends CustomVectorArithmetic<V>
+>
+    extends StatefulWidget {
   final T initial;
   final AnimationSpec? defaultAnimation;
-  final void Function(_DriverState<T> driver) onReady;
+  final void Function(_DriverState<T, V> driver) onReady;
   final void Function(T animated) onBuild;
 
   const _Host({
@@ -30,10 +35,14 @@ class _Host<T extends CustomVectorArithmetic<T>> extends StatefulWidget {
   });
 
   @override
-  State<_Host<T>> createState() => _DriverState<T>();
+  State<_Host<T, V>> createState() => _DriverState<T, V>();
 }
 
-class _DriverState<T extends CustomVectorArithmetic<T>> extends State<_Host<T>> {
+class _DriverState<
+  T extends AnimatableData<V>,
+  V extends CustomVectorArithmetic<V>
+>
+    extends State<_Host<T, V>> {
   late T _value = widget.initial;
 
   void update(T newValue, {AnimationSpec? animation, bool disabled = false}) {
@@ -55,7 +64,7 @@ class _DriverState<T extends CustomVectorArithmetic<T>> extends State<_Host<T>> 
 
   @override
   Widget build(BuildContext context) {
-    return AnimatableValue<T>(
+    return AnimatableValue<T, V>(
       value: _value,
       defaultAnimation: widget.defaultAnimation,
       builder: (context, animated) {
@@ -71,11 +80,11 @@ void main() {
     tester,
   ) async {
     final builds = <double>[];
-    late _DriverState<AnimatableDouble> driver;
+    late _DriverState<DoubleVectorArithmetic, DoubleVectorArithmetic> driver;
 
     await tester.pumpWidget(
-      _Host<AnimatableDouble>(
-        initial: AnimatableDouble(0.0),
+      _Host<DoubleVectorArithmetic, DoubleVectorArithmetic>(
+        initial: DoubleVectorArithmetic(0.0),
         onReady: (d) => driver = d,
         onBuild: (v) => builds.add(v.value),
       ),
@@ -83,7 +92,7 @@ void main() {
     await tester.pump();
     builds.clear();
 
-    driver.update(AnimatableDouble(1.0));
+    driver.update(DoubleVectorArithmetic(1.0));
     await tester.pump();
     expect(builds.last, 1.0);
 
@@ -96,11 +105,11 @@ void main() {
     tester,
   ) async {
     final builds = <double>[];
-    late _DriverState<AnimatableDouble> driver;
+    late _DriverState<DoubleVectorArithmetic, DoubleVectorArithmetic> driver;
 
     await tester.pumpWidget(
-      _Host<AnimatableDouble>(
-        initial: AnimatableDouble(0.0),
+      _Host<DoubleVectorArithmetic, DoubleVectorArithmetic>(
+        initial: DoubleVectorArithmetic(0.0),
         defaultAnimation: AnimationSpec(
           BezierAnimation.linear(const Duration(seconds: 1)),
         ),
@@ -111,7 +120,7 @@ void main() {
     await tester.pump();
     builds.clear();
 
-    driver.update(AnimatableDouble(1.0), disabled: true);
+    driver.update(DoubleVectorArithmetic(1.0), disabled: true);
     await tester.pump();
     expect(builds.last, 1.0);
   });
@@ -120,11 +129,11 @@ void main() {
     'linear bezier interpolates over duration and settles at target',
     (tester) async {
       final builds = <double>[];
-      late _DriverState<AnimatableDouble> driver;
+      late _DriverState<DoubleVectorArithmetic, DoubleVectorArithmetic> driver;
 
       await tester.pumpWidget(
-        _Host<AnimatableDouble>(
-          initial: AnimatableDouble(0.0),
+        _Host<DoubleVectorArithmetic, DoubleVectorArithmetic>(
+          initial: DoubleVectorArithmetic(0.0),
           onReady: (d) => driver = d,
           onBuild: (v) => builds.add(v.value),
         ),
@@ -132,7 +141,7 @@ void main() {
       await tester.pump();
 
       driver.update(
-        AnimatableDouble(1.0),
+        DoubleVectorArithmetic(1.0),
         animation: AnimationSpec(
           BezierAnimation.linear(const Duration(seconds: 1)),
         ),
@@ -154,11 +163,11 @@ void main() {
     tester,
   ) async {
     final builds = <double>[];
-    late _DriverState<AnimatableDouble> driver;
+    late _DriverState<DoubleVectorArithmetic, DoubleVectorArithmetic> driver;
 
     await tester.pumpWidget(
-      _Host<AnimatableDouble>(
-        initial: AnimatableDouble(0.0),
+      _Host<DoubleVectorArithmetic, DoubleVectorArithmetic>(
+        initial: DoubleVectorArithmetic(0.0),
         defaultAnimation: AnimationSpec(
           BezierAnimation.linear(const Duration(seconds: 1)),
         ),
@@ -168,7 +177,7 @@ void main() {
     );
     await tester.pump();
 
-    driver.update(AnimatableDouble(1.0));
+    driver.update(DoubleVectorArithmetic(1.0));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
     expect(builds.last, closeTo(0.5, 0.1));
@@ -181,11 +190,11 @@ void main() {
     tester,
   ) async {
     final builds = <double>[];
-    late _DriverState<AnimatableDouble> driver;
+    late _DriverState<DoubleVectorArithmetic, DoubleVectorArithmetic> driver;
 
     await tester.pumpWidget(
-      _Host<AnimatableDouble>(
-        initial: AnimatableDouble(0.0),
+      _Host<DoubleVectorArithmetic, DoubleVectorArithmetic>(
+        initial: DoubleVectorArithmetic(0.0),
         onReady: (d) => driver = d,
         onBuild: (v) => builds.add(v.value),
       ),
@@ -193,7 +202,7 @@ void main() {
     await tester.pump();
 
     driver.update(
-      AnimatableDouble(1.0),
+      DoubleVectorArithmetic(1.0),
       animation: AnimationSpec(
         BezierAnimation.linear(const Duration(seconds: 1)),
       ),
@@ -206,7 +215,7 @@ void main() {
     // Interrupt with a new target. The next visible frame should be close to
     // `beforeInterrupt`, not snap back toward 0.
     driver.update(
-      AnimatableDouble(0.0),
+      DoubleVectorArithmetic(0.0),
       animation: AnimationSpec(
         BezierAnimation.linear(const Duration(seconds: 1)),
       ),
@@ -217,11 +226,11 @@ void main() {
 
   testWidgets('spring eventually settles and stops the ticker', (tester) async {
     final builds = <double>[];
-    late _DriverState<AnimatableDouble> driver;
+    late _DriverState<DoubleVectorArithmetic, DoubleVectorArithmetic> driver;
 
     await tester.pumpWidget(
-      _Host<AnimatableDouble>(
-        initial: AnimatableDouble(0.0),
+      _Host<DoubleVectorArithmetic, DoubleVectorArithmetic>(
+        initial: DoubleVectorArithmetic(0.0),
         onReady: (d) => driver = d,
         onBuild: (v) => builds.add(v.value),
       ),
@@ -229,7 +238,7 @@ void main() {
     await tester.pump();
 
     driver.update(
-      AnimatableDouble(1.0),
+      DoubleVectorArithmetic(1.0),
       animation: AnimationSpec(
         SpringAnimation(mass: 1, stiffness: 100, damping: 10),
       ),
@@ -251,11 +260,11 @@ void main() {
     tester,
   ) async {
     final builds = <double>[];
-    late _DriverState<AnimatableDouble> driver;
+    late _DriverState<DoubleVectorArithmetic, DoubleVectorArithmetic> driver;
 
     await tester.pumpWidget(
-      _Host<AnimatableDouble>(
-        initial: AnimatableDouble(0.0),
+      _Host<DoubleVectorArithmetic, DoubleVectorArithmetic>(
+        initial: DoubleVectorArithmetic(0.0),
         onReady: (d) => driver = d,
         onBuild: (v) => builds.add(v.value),
       ),
@@ -264,7 +273,7 @@ void main() {
     final before = builds.length;
 
     driver.update(
-      AnimatableDouble(0.0),
+      DoubleVectorArithmetic(0.0),
       animation: AnimationSpec(
         BezierAnimation.linear(const Duration(seconds: 1)),
       ),
@@ -281,10 +290,10 @@ void main() {
     tester,
   ) async {
     final builds = <AnimatableOffset>[];
-    late _DriverState<AnimatableOffset> driver;
+    late _DriverState<AnimatableOffset, AnimatablePair<DoubleVectorArithmetic, DoubleVectorArithmetic>> driver;
 
     await tester.pumpWidget(
-      _Host<AnimatableOffset>(
+      _Host<AnimatableOffset, AnimatablePair<DoubleVectorArithmetic, DoubleVectorArithmetic>>(
         initial: AnimatableOffset(Offset.zero),
         onReady: (d) => driver = d,
         onBuild: (v) => builds.add(v),
@@ -308,49 +317,14 @@ void main() {
     expect(builds.last.value.dy, closeTo(200, 1e-9));
   });
 
-  testWidgets('AnimatableColor animates component-wise in linear sRGB', (
-    tester,
-  ) async {
-    final builds = <AnimatableColor>[];
-    late _DriverState<AnimatableColor> driver;
-
-    // Animate opaque black → opaque mid-grey (in linear sRGB). All four
-    // channels are stored as 0..1 floats; we read them directly.
-    await tester.pumpWidget(
-      _Host<AnimatableColor>(
-        initial: AnimatableColor(
-          const Color.from(alpha: 1, red: 0, green: 0, blue: 0),
-        ),
-        onReady: (d) => driver = d,
-        onBuild: (v) => builds.add(v),
-      ),
-    );
-    await tester.pump();
-
-    driver.update(
-      AnimatableColor(
-        const Color.from(alpha: 1, red: 0.5, green: 0.5, blue: 0.5),
-      ),
-      animation: AnimationSpec(
-        BezierAnimation.linear(const Duration(seconds: 1)),
-      ),
-    );
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 1200));
-    expect(builds.last.value.r, closeTo(0.5, 1e-6));
-    expect(builds.last.value.g, closeTo(0.5, 1e-6));
-    expect(builds.last.value.b, closeTo(0.5, 1e-6));
-    expect(builds.last.value.a, closeTo(1.0, 1e-6));
-  });
-
   testWidgets('dispose mid-flight does not throw late callbacks', (
     tester,
   ) async {
-    late _DriverState<AnimatableDouble> driver;
+    late _DriverState<DoubleVectorArithmetic, DoubleVectorArithmetic> driver;
 
     await tester.pumpWidget(
-      _Host<AnimatableDouble>(
-        initial: AnimatableDouble(0.0),
+      _Host<DoubleVectorArithmetic, DoubleVectorArithmetic>(
+        initial: DoubleVectorArithmetic(0.0),
         onReady: (d) => driver = d,
         onBuild: (_) {},
       ),
@@ -358,7 +332,7 @@ void main() {
     await tester.pump();
 
     driver.update(
-      AnimatableDouble(1.0),
+      DoubleVectorArithmetic(1.0),
       animation: AnimationSpec(
         BezierAnimation.linear(const Duration(seconds: 1)),
       ),

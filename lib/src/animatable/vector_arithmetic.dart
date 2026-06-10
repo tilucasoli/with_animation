@@ -1,21 +1,20 @@
-import 'dart:ui';
+// import 'dart:ui';
 
-import 'animatable_color.dart';
-import 'animatable_double.dart';
-import 'animatable_offset.dart';
-import 'empty_animatable_data.dart';
+import '../../with_animation.dart';
 
 /// Dart port of OpenSwiftUI's `VectorArithmetic` protocol.
 ///
 /// Any value that participates in animation must be able to add, subtract,
 /// and scale by a `double`. `magnitudeSquared` is used by spring physics to
 /// detect "settled" state.
-abstract class CustomVectorArithmetic<T extends CustomVectorArithmetic<T>> {
-  T operator +(T other);
-  T operator -(T other);
-  T scale(double factor);
+abstract class CustomVectorArithmetic<
+  Self extends CustomVectorArithmetic<Self>
+> {
+  Self operator +(Self other);
+  Self operator -(Self other);
+  Self scale(double factor);
   double get magnitudeSquared;
-  T get zero;
+  Self get zero;
 }
 
 /// Composes two [CustomVectorArithmetic] values into one. Mirror of SwiftUI's
@@ -25,8 +24,8 @@ class AnimatablePair<
   B extends CustomVectorArithmetic<B>
 >
     extends CustomVectorArithmetic<AnimatablePair<A, B>> {
-  final A first;
-  final B second;
+  A first;
+  B second;
   AnimatablePair(this.first, this.second);
 
   @override
@@ -127,17 +126,13 @@ class VectorArithmetic {
   final CustomVectorArithmetic base;
   const VectorArithmetic(this.base);
 
-  /// Wraps a `double` as an [AnimatableDouble].
+  /// Wraps a `double` as an [DoubleVectorArithmetic].
   static VectorArithmetic double_(double value) =>
-      VectorArithmetic(AnimatableDouble(value));
+      VectorArithmetic(DoubleVectorArithmetic(value));
 
-  /// Wraps an [Offset] as an [AnimatableOffset].
-  static VectorArithmetic offset(Offset offset) =>
-      VectorArithmetic(AnimatableOffset(offset));
-
-  /// Wraps a [Color] as an [AnimatableColor].
-  static VectorArithmetic color(Color color) =>
-      VectorArithmetic(AnimatableColor(color));
+  // /// Wraps an [Offset] as an [AnimatableOffset].
+  // static VectorArithmetic offset(Offset offset) =>
+  //     VectorArithmetic(AnimatableOffset(offset));
 
   /// An [EmptyAnimatableData] placeholder for types with no animatable data.
   static VectorArithmetic empty() => VectorArithmetic(EmptyAnimatableData());
@@ -147,8 +142,7 @@ class VectorArithmetic {
   static VectorArithmetic pair<
     A extends CustomVectorArithmetic<A>,
     B extends CustomVectorArithmetic<B>
-  >(A first, B second) =>
-      VectorArithmetic(AnimatablePair<A, B>(first, second));
+  >(A first, B second) => VectorArithmetic(AnimatablePair<A, B>(first, second));
 
   /// Wraps a list of [CustomVectorArithmetic] values as an [AnimatableArray].
   static VectorArithmetic array<E extends CustomVectorArithmetic<E>>(

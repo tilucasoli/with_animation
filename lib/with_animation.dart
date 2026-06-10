@@ -3,9 +3,8 @@
 /// See ../../Implementing-in-Flutter.md for the design walkthrough.
 library;
 
-export 'src/animatable/animatable_color.dart';
-export 'src/animatable/animatable_double.dart';
-export 'src/animatable/animatable_offset.dart';
+export 'src/animatable/animatable_data.dart';
+export 'src/animatable/animatable_primitives.dart';
 export 'src/animatable/empty_animatable_data.dart';
 export 'src/animatable_value.dart';
 export 'src/animation_spec.dart';

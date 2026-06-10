@@ -18,21 +18,21 @@ void main() {
     test('default shouldMerge returns false', () {
       final a = _Constant(0.5);
       final b = _Constant(1.0);
-      final result = a.shouldMerge<AnimatableDouble>(
+      final result = a.shouldMerge<DoubleVectorArithmetic>(
         b,
-        AnimatableDouble(1.0),
+        DoubleVectorArithmetic(1.0),
         0.0,
-        AnimationContext<AnimatableDouble>(),
+        AnimationContext<DoubleVectorArithmetic>(),
       );
       expect(result, isFalse);
     });
 
     test('animate scales the value as expected', () {
       final a = _Constant(0.25);
-      final out = a.animate<AnimatableDouble>(
-        AnimatableDouble(8.0),
+      final out = a.animate<DoubleVectorArithmetic>(
+        DoubleVectorArithmetic(8.0),
         0.0,
-        AnimationContext<AnimatableDouble>(),
+        AnimationContext<DoubleVectorArithmetic>(),
       );
       expect(out!.value, 2.0);
     });
@@ -59,7 +59,7 @@ void main() {
     });
 
     test('context defaults isLogicallyComplete to false', () {
-      final c = AnimationContext<AnimatableDouble>();
+      final c = AnimationContext<DoubleVectorArithmetic>();
       expect(c.isLogicallyComplete, isFalse);
     });
   });
