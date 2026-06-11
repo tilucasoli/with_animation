@@ -1,5 +1,6 @@
 import 'custom_animation/bezier_animation.dart';
 import 'custom_animation/custom_animation.dart';
+import 'custom_animation/delay_animation.dart';
 import 'custom_animation/fluid_spring_animation.dart';
 import 'custom_animation/repeat_animation.dart';
 import 'custom_animation/speed_animation.dart';
@@ -101,4 +102,8 @@ class Animations {
   /// slower.
   Animations speed(double speed) =>
       Animations(SpeedAnimation(base: base, speed: speed));
+
+  /// Delays the animation by a fixed [duration].
+  Animations delay(Duration duration) =>
+      Animations(DelayAnimation(base: base, delay: duration));
 }
