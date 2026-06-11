@@ -1,0 +1,27 @@
+# pub uses .pubignore in place of .gitignore when present. Mirror the
+# .gitignore entries here and also exclude the demo example app.
+
+# Dart/Flutter
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# macOS
+.DS_Store
+
+# Claude
+.claude/
+
+# Demo app — not part of the published package.
+example/
